@@ -9,6 +9,9 @@ namespace pz18Request.Services
 {
     internal interface ICommentRepository
     {
+        //вывод комментариев к заявкам
         Task<List<Comment>> GetCommentAsync();
+
+        Task<List<Comment>> GetCommentByRequestAsync(int requestId);
     }
 }

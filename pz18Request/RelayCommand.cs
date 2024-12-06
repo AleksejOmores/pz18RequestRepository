@@ -29,7 +29,7 @@ namespace pz18Request
 
         public bool CanExecute(object? parameter)
         {
-            if(_canExecute != null)
+            if (_canExecute != null)
             {
                 return _canExecute();
             }
@@ -41,7 +41,7 @@ namespace pz18Request
 
         public void Execute(object? parameter)
         {
-            if(_execute != null) { _execute(); }
+            if (_execute != null) { _execute(); }
         }
         #endregion
     }
@@ -52,7 +52,7 @@ namespace pz18Request
         private Func<T, bool> _canExecute;
         #region конструкторы
         public RelayCommand(Action<T> execute) => _execute = execute;
-        public RelayCommand(Action<T> execute, Func<T,bool> canExecute)
+        public RelayCommand(Action<T> execute, Func<T, bool> canExecute)
         {
             _execute = execute;
             _canExecute=canExecute;
@@ -68,7 +68,7 @@ namespace pz18Request
 
         public bool CanExecute(object? parameter)
         {
-            if(_canExecute != null)
+            if (_canExecute != null)
             {
                 T param = (T)parameter;
                 return _canExecute(param);
@@ -81,7 +81,7 @@ namespace pz18Request
 
         public void Execute(object? parameter)
         {
-            if (_execute != null) 
+            if (_execute != null)
                 _execute((T)parameter);
         }
         #endregion
