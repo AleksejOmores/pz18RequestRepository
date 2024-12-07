@@ -11,7 +11,8 @@ namespace pz18Request.Services
     {
         //вывод комментариев к заявкам
         Task<List<Comment>> GetCommentAsync();
-
+        
+        //вывод комментария определенной заявки
         Task<List<Comment>> GetCommentByRequestAsync(int requestId);
     }
 }

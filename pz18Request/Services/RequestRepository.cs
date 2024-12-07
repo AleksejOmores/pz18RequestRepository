@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace pz18Request.Services
 {
-    internal class RequestRepository : IRequestRepository
+    public class RequestRepository : IRequestRepository
     {
         readonly RegApplicationContext _context = new RegApplicationContext();
         public Task<List<Request>> GetRequestAsync()
