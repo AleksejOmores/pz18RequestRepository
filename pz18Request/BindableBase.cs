@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace pz18Request
 {
-    internal class BindableBase : INotifyPropertyChanged
+    public class BindableBase : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 

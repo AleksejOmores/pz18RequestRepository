@@ -17,6 +17,8 @@ namespace pz18Request.ViewModel
         {
             _repository = repository;
             Requests = new ObservableCollection<Request>();
+            AddRequestCommand = new RelayCommand(OnAddRequest);
+            EditRequestCommand = new RelayCommand<Request>(OnEditRequest);
             LoadRequest();
         }
 
@@ -35,6 +37,21 @@ namespace pz18Request.ViewModel
             Requests = new ObservableCollection<Request>(_requestList);
         }
 
+        public RelayCommand AddRequestCommand { get; private set; }
+
+        public RelayCommand<Request> EditRequestCommand { get; private set; }
+
+        public event Action AddRequestRequested = delegate { };
+        public event Action<Request> EditRequestRequested = delegate { };
+
+        private void OnAddRequest()
+        {
+            AddRequestRequested?.Invoke();
+        }
+        private void OnEditRequest(Request request)
+        {
+            EditRequestRequested(request);
+        }
 
     }
 }

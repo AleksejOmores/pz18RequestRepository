@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace pz18Request
 {
-    internal class ValidableBindableBase : BindableBase, INotifyDataErrorInfo
+    public class ValidableBindableBase : BindableBase, INotifyDataErrorInfo
     {
         private Dictionary<string, List<string>> _errors 
             = new Dictionary<string, List<string>>();

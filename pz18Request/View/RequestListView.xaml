@@ -26,7 +26,7 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Button Content="добавить клиента"
-            Command="{Binding AddCustomerCommand}"
+            Command="{Binding AddRequestCommand}"
             Grid.Column="0"
             HorizontalAlignment="Left"
             HorizontalContentAlignment="Center"
@@ -59,7 +59,7 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Button Content="редактировать"
-                            Command="{Binding DataContext.EditCustomerCommand,
+                            Command="{Binding DataContext.EditRequestCommand,
                                 RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
                             CommandParameter="{Binding}"
                             Margin="5"/>

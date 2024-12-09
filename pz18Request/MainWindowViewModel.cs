@@ -1,22 +1,23 @@
-﻿using Microsoft.EntityFrameworkCore.Query;
+﻿using pz18Request.Model;
 using pz18Request.Services;
 using pz18Request.ViewModel;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Unity;
 
 namespace pz18Request
 {
     internal class MainWindowViewModel : BindableBase
     {
         private RequestListViewModel _requestListVM;
+        private AddEditRequestViewModel _addEditRequestVM;
 
+        private IRequestRepository _requestRepository = new RequestRepository();
         public MainWindowViewModel()
         {
             NavigationCommand = new RelayCommand<string>(OnNavigation);
             _requestListVM = new RequestListViewModel(new RequestRepository());
+            _addEditRequestVM = RepoContainer.Container.Resolve<AddEditRequestViewModel>();
+            _requestListVM.AddRequestRequested += NavigationAddRequest;
+            _requestListVM.EditRequestRequested += NavigationUpdateRequest;
         }
 
         public BindableBase _currentViewModel;
@@ -34,6 +35,17 @@ namespace pz18Request
                 case "requestList":
                     CurrentViewModel = _requestListVM; break;
             }
+        }
+
+        private void NavigationUpdateRequest(Request request)
+        {
+            _addEditRequestVM.isEditMode = false;
+            CurrentViewModel = _addEditRequestVM;
+        }
+        private void NavigationAddRequest()
+        {
+            _addEditRequestVM.isEditMode = false;
+            CurrentViewModel = _addEditRequestVM;
         }
     }
 }
