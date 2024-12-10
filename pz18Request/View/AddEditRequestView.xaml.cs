@@ -18,9 +18,9 @@ namespace pz18Request.View
     /// <summary>
     /// Логика взаимодействия для AddRequestViewModel.xaml
     /// </summary>
-    public partial class AddRequestViewModel : UserControl
+    public partial class AddRequestView : UserControl
     {
-        public AddRequestViewModel()
+        public AddRequestView()
         {
             InitializeComponent();
         }

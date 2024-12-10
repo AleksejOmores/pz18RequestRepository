@@ -14,7 +14,7 @@
             <views:RequestListView/>
         </DataTemplate>
         <DataTemplate DataType="{x:Type viewModel:AddEditRequestViewModel}">
-            <views:AddRequestViewModel/>
+            <views:AddRequestView/>
         </DataTemplate>
     </Window.Resources>
 
