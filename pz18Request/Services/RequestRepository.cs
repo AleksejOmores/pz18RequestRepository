@@ -19,6 +19,11 @@ namespace pz18Request.Services
             return request;
         }
 
+        public async Task<List<DeviceModel>> GetDeviceModelsAsync()
+        {
+            return await _context.DeviceModels.ToListAsync();
+        }
+
         public Task<List<Request>> GetRequestAsync()
         {
             return _context.Requests.ToListAsync();

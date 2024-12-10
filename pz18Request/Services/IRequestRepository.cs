@@ -20,5 +20,8 @@ namespace pz18Request.Services
 
         //добавить заявку
         Task<Request> AddRequestAsync(Request request);
+
+        //получение модели по ее Id
+        Task<List<DeviceModel>> GetDeviceModelsAsync();
     }
 }

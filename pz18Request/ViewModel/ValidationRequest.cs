@@ -10,18 +10,18 @@ namespace pz18Request.ViewModel
     public class ValidationRequest : ValidableBindableBase
     {
         private int _requestId;
-        public int RequestId { get => _requestId; set => SetProperty(ref _requestId, value); }
+        public int RequestID { get => _requestId; set => SetProperty(ref _requestId, value); }
 
-        [Required]
         private DateOnly _dateAdded;
+        [Required]
         public DateOnly DateAdded { get => _dateAdded; set => SetProperty(ref _dateAdded, value); }
 
-        [Required]
         private int _deviceModelId;
-        public int DeviceModelId { get => _deviceModelId; set => SetProperty(ref _deviceModelId, value); }
-
         [Required]
+        public int DeviceModelID { get => _deviceModelId; set => SetProperty(ref _deviceModelId, value); }
+
         private string _problemDescription;
+        [Required]
         public string ProblemDescription { get => _problemDescription; set => SetProperty(ref _problemDescription, value); }
 
     }

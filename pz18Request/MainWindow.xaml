@@ -13,12 +13,15 @@
         <DataTemplate DataType="{x:Type viewModel:RequestListViewModel}">
             <views:RequestListView/>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModel:AddEditRequestViewModel}">
+            <views:AddRequestViewModel/>
+        </DataTemplate>
     </Window.Resources>
 
     <Window.DataContext>
         <local:MainWindowViewModel/>
     </Window.DataContext>
-    
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
@@ -26,24 +29,17 @@
         </Grid.RowDefinitions>
 
 
-        <Grid x:Name="NavigationBar">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
+        <DockPanel Grid.Row="0" Background="#E8E8E8" Height="30">
+            <Button Content="Заказы" Command="{Binding NavigationCommand}" Width="400" CommandParameter="requestList" DockPanel.Dock="Left"/>
+            <Button Content="Комментарии" Command="{Binding NavigationCommand}" CommandParameter="orderPrep" DockPanel.Dock="Left"/>
+        </DockPanel>
 
-            <Button Content="Заказы"
-            Command="{Binding NavigationCommand}"
-            CommandParameter="requestList"/>
-
-            <Button Content="оформить заказ"
-            Command="{Binding NavigationCommand}"
-            CommandParameter="orderPrep"
-            Grid.Column="1"/>
-        </Grid>
-        
         <Grid x:Name="ContentGrid" Grid.Row="1">
-            <ContentControl Content="{Binding CurrentViewModel}"/>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="589*"/>
+                <ColumnDefinition Width="211*"/>
+            </Grid.ColumnDefinitions>
+            <ContentControl Content="{Binding CurrentViewModel}" Grid.ColumnSpan="2"/>
         </Grid>
     </Grid>
 </Window>

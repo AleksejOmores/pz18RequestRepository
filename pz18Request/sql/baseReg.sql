@@ -32,7 +32,7 @@ CREATE TABLE DeviceModels (    DeviceModelID INT not null PRIMARY KEY,
 
 -- Таблица заявок
 CREATE TABLE Requests (
-    RequestID INT not null PRIMARY KEY,    DateAdded DATE NOT NULL,
+    RequestID INT identity(1,1) not null PRIMARY KEY,    DateAdded DATE NOT NULL,
     DeviceModelID INT NOT NULL,    ProblemDescription NVARCHAR(255) NOT NULL,
     StatusID INT NOT NULL,    ClientID INT NOT NULL,
     TechnicianID INT NULL,

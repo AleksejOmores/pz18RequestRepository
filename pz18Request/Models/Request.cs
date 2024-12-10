@@ -7,7 +7,7 @@ namespace pz18Request.Model;
 public partial class Request
 {
     [JsonRequired]
-    [JsonPropertyName("id")]
+    [JsonPropertyName("RequestId")]
     public int RequestId { get; set; }
 
     [JsonRequired]

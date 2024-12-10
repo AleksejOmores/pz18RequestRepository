@@ -7,6 +7,15 @@
              xmlns:data="clr-namespace:pz18Request.ViewModel"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <Style TargetType="TextBox">
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="True">
+                    <Setter Property="ToolTip" Value="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=(Validation.Errors).CurrentItem.ErrorContent}" />
+                </Trigger>
+            </Style.Triggers>            
+        </Style>
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
@@ -14,7 +23,7 @@
         </Grid.RowDefinitions>
 
         <Grid Name="RequestGrid" Grid.Row="0"
-              DataContext="{Binding Request}"
+              DataContext="{Binding Requests}"
               Margin="5"
               HorizontalAlignment="Center">
             <Grid.RowDefinitions>
@@ -28,18 +37,20 @@
                 <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
 
-            <!--Идентификатор заявки--> 
             <TextBlock Text="Идентификатор" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
-            <TextBox Text="{Binding RequestId, ValidatesOnNotifyDataErrors=True}" Grid.Column="1" Grid.Row="0" MinWidth="200"/>
+            <TextBox Text="{Binding RequestID, ValidatesOnNotifyDataErrors=True}" Grid.Column="1" Grid.Row="0" MinWidth="200" Margin="3" />
             <!--Дата заявки-->
             <TextBlock Text="Дата подачи заявки" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
-            <TextBox Text="{Binding DateAdded, ValidatesOnNotifyDataErrors=True}" Grid.Column="1" Grid.Row="1" MinWidth="200"/>
+            <TextBox Text="{Binding DateAdded, ValidatesOnNotifyDataErrors=True}" Grid.Column="1" Grid.Row="1" MinWidth="200" Margin="3"/>
             <!--Идентификатор модели-->
             <TextBlock Text="Идентификатор модели" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
-            <CheckBox Content="{Binding DeviceModelId, ValidatesOnNotifyDataErrors=True}"  Grid.Column="1" Grid.Row="2" MinWidth="200" MinHeight="25"/>
+            <ComboBox ItemsSource="{Binding DeviceModels}" 
+                      DisplayMemberPath="DeviceModelName" 
+                      SelectedItem="{Binding DeviceModelID, ValidatesOnNotifyDataErrors=True}"  
+                      Grid.Column="1" Grid.Row="2" MinWidth="200" Margin="3"/>
             <!--Описанная проблема-->
             <TextBlock Text="Проблема" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
-            <TextBox Text="{Binding ProblemDescription, ValidatesOnNotifyDataErrors=True}" Grid.Column="1" Grid.Row="3" MinWidth="200"/>
+            <TextBox Text="{Binding ProblemDescription, ValidatesOnNotifyDataErrors=True}" Grid.Column="1" Grid.Row="3" MinWidth="200" Margin="3"/>
         </Grid>
 
         <Grid Name="CommandButtonsGrid" Grid.Row="1"

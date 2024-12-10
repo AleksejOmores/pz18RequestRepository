@@ -22,6 +22,14 @@ namespace pz18Request.ViewModel
             LoadRequest();
         }
 
+        private bool _isEditMode;
+
+        public bool isEditMode
+        {
+            get => _isEditMode;
+            set => SetProperty(ref _isEditMode, value);
+        }
+
         private ObservableCollection<Request>? _request;
         public ObservableCollection<Request>? Requests
         {

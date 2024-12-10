@@ -18,6 +18,7 @@ namespace pz18Request
             _addEditRequestVM = RepoContainer.Container.Resolve<AddEditRequestViewModel>();
             _requestListVM.AddRequestRequested += NavigationAddRequest;
             _requestListVM.EditRequestRequested += NavigationUpdateRequest;
+            _addEditRequestVM.Done += NavigationToListRequest;
         }
 
         public BindableBase _currentViewModel;
@@ -39,13 +40,19 @@ namespace pz18Request
 
         private void NavigationUpdateRequest(Request request)
         {
-            _addEditRequestVM.isEditMode = false;
+            _addEditRequestVM.isEditMode = true;
+            _addEditRequestVM.SetCustomer(request);
             CurrentViewModel = _addEditRequestVM;
         }
         private void NavigationAddRequest()
         {
             _addEditRequestVM.isEditMode = false;
             CurrentViewModel = _addEditRequestVM;
+        }
+        private void NavigationToListRequest()
+        {
+            _requestListVM.isEditMode = false;
+            CurrentViewModel = _requestListVM;
         }
     }
 }
