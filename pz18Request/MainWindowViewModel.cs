@@ -40,13 +40,13 @@ namespace pz18Request
 
         private void NavigationUpdateRequest(Request request)
         {
-            _addEditRequestVM.isEditMode = true;
-            _addEditRequestVM.SetCustomer(request);
+            _addEditRequestVM.IsEditMode = true;
+            _addEditRequestVM.SetRequest(request);
             CurrentViewModel = _addEditRequestVM;
         }
         private void NavigationAddRequest()
         {
-            _addEditRequestVM.isEditMode = false;
+            _addEditRequestVM.IsEditMode = false;
             CurrentViewModel = _addEditRequestVM;
         }
         private void NavigationToListRequest()

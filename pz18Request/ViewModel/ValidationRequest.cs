@@ -24,5 +24,17 @@ namespace pz18Request.ViewModel
         [Required]
         public string ProblemDescription { get => _problemDescription; set => SetProperty(ref _problemDescription, value); }
 
+        private int _statusId;
+        [Required]
+        public int StatusId { get => _statusId; set => SetProperty(ref _statusId, value); }
+
+        private int _clientId;
+        [Required]
+        public int ClientId { get => _clientId; set => SetProperty(ref _clientId, value); }
+
+        private int _technicianId;
+        [Required]
+        public int TechnicianId { get => _technicianId; set => SetProperty(ref _technicianId, value); }
+
     }
 }

@@ -1,36 +1,28 @@
-﻿using Microsoft.EntityFrameworkCore;
-using pz18Request.Model;
-using pz18Request.Services;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using pz18Request.Model;
+using pz18Request.Services;
 
 namespace pz18Request.ViewModel
 {
     public class AddEditRequestViewModel : BindableBase
     {
-        private readonly IRequestRepository _repository = new RequestRepository();
-        public AddEditRequestViewModel()
+        private readonly IRequestRepository _repository;
+
+        public AddEditRequestViewModel(IRequestRepository repository)
         {
-            CancelCommand = new RelayCommand(OnCancel);
+            _repository = repository;
+
             SaveCommand = new RelayCommand(OnSave, CanSave);
+            CancelCommand = new RelayCommand(OnCancel);
+            LoadRequestIds();
+
             ValidationRequest = new ValidationRequest();
-            LoadDeviceModelIds();
         }
-
-        public bool _isEditMode;
-
-        public bool isEditMode
-        {
-            get => _isEditMode;
-            set => SetProperty(ref _isEditMode, value);
-        }
-
-        private Request _editRequest;
 
         private ValidationRequest _validationRequest;
         public ValidationRequest ValidationRequest
@@ -38,36 +30,30 @@ namespace pz18Request.ViewModel
             get => _validationRequest;
             set => SetProperty(ref _validationRequest, value);
         }
-        private ObservableCollection<int> _deviceModelIds;
-        public ObservableCollection<int> DeviceModelIds
+
+        private ObservableCollection<int> _requestIds;
+        public ObservableCollection<int> RequestIds
         {
-            get => _deviceModelIds;
-            set => SetProperty(ref _deviceModelIds, value);
+            get => _requestIds;
+            set => SetProperty(ref _requestIds, value);
         }
 
-        private int _selectedDeviceModelId;
-        public int SelectedDeviceModelId
+        private int _selectedRequestId;
+        public int SelectedRequestId
         {
-            get => _selectedDeviceModelId;
+            get => _selectedRequestId;
             set
             {
-                SetProperty(ref _selectedDeviceModelId, value);
-                ValidationRequest.DeviceModelID = value;
+                SetProperty(ref _selectedRequestId, value);
+                ValidationRequest.RequestID = value;
             }
         }
 
-        private async void LoadDeviceModelIds()
+        private bool _isEditMode;
+        public bool IsEditMode
         {
-            try
-            {
-                var requests = await _repository.GetRequestAsync();
-                var ids = requests.Select(r => r.DeviceModelId).Distinct().ToList();
-                DeviceModelIds = new ObservableCollection<int>(ids);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Ошибка загрузки идентификаторов моделей устройств: {ex.Message}");
-            }
+            get => _isEditMode;
+            set => SetProperty(ref _isEditMode, value);
         }
 
         public RelayCommand SaveCommand { get; private set; }
@@ -75,16 +61,50 @@ namespace pz18Request.ViewModel
 
         public event Action Done;
 
-        private void OnCanExecuteChanges(object sender, EventArgs e)
+        private async void LoadRequestIds()
         {
-            SaveCommand.OnCanExecuteChanged();
+            try
+            {
+                var requests = await _repository.GetRequestAsync();
+                RequestIds = new ObservableCollection<int>(requests.Select(r => r.RequestId).Distinct());
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка загрузки ID заявок: {ex.Message}");
+            }
         }
-        private void CopyRequest(Request request, ValidationRequest validRequest)
+
+        private bool CanSave() => !ValidationRequest.HasErrors;
+
+        private async void OnSave()
         {
-            validRequest.RequestID = request.RequestId;
-            validRequest.DateAdded = request.DateAdded;
-            validRequest.DeviceModelID = request.DeviceModelId;
-            validRequest.ProblemDescription = request.ProblemDescription;
+            try
+            {
+                var request = new Request
+                {
+                    RequestId = ValidationRequest.RequestID,
+                    DateAdded = ValidationRequest.DateAdded,
+                    DeviceModelId = ValidationRequest.DeviceModelID,
+                    ProblemDescription = ValidationRequest.ProblemDescription
+                };
+
+                if (IsEditMode)
+                {
+                    await _repository.UpdateRequestAsync(request);
+                    MessageBox.Show("Заявка успешно обновлена.", "Информация", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                else
+                {
+                    await _repository.AddRequestAsync(request);
+                    MessageBox.Show("Заявка успешно добавлена.", "Информация", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+
+                Done?.Invoke();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка сохранения: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void OnCancel()
@@ -92,41 +112,28 @@ namespace pz18Request.ViewModel
             Done?.Invoke();
         }
 
-
-        private void UpdateRequest(ValidationRequest request, Request target)
+        public void SetRequest(Request request)
         {
-            target.RequestId = request.RequestID;
-            target.DateAdded = request.DateAdded;
-            target.DeviceModelId = request.DeviceModelID;
-            target.ProblemDescription = request.ProblemDescription;
-        }
-
-        private bool CanSave() => !ValidationRequest.HasErrors;
-        private async void OnSave()
-        {
-            UpdateRequest(ValidationRequest, _editRequest);
-            if (isEditMode)
-                await _repository.UpdateRequestAsync(_editRequest);
-            else
-                await _repository.AddRequestAsync(_editRequest);
-            ShowMessage("Заявка успешно сохранена");
-            Done?.Invoke();
-               
-        }
-
-        public void SetCustomer(Request request)
-        {
-            _editRequest = request;
             if (ValidationRequest != null)
+            {
                 ValidationRequest.ErrorsChanged -= OnCanExecuteChanges;
-            ValidationRequest = new ValidationRequest();
+            }
+
+            ValidationRequest = new ValidationRequest
+            {
+                RequestID = request.RequestId,
+                DateAdded = request.DateAdded,
+                DeviceModelID = request.DeviceModelId,
+                ProblemDescription = request.ProblemDescription
+            };
+
             ValidationRequest.ErrorsChanged += OnCanExecuteChanges;
-            CopyRequest(request, ValidationRequest);
+            IsEditMode = true;
         }
 
-        private void ShowMessage(string message)
+        private void OnCanExecuteChanges(object sender, EventArgs e)
         {
-            MessageBox.Show(message, "Информация", MessageBoxButton.OK, MessageBoxImage.Information);
+            SaveCommand.OnCanExecuteChanged();
         }
     }
 }
