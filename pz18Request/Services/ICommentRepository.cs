@@ -7,12 +7,14 @@ using System.Threading.Tasks;
 
 namespace pz18Request.Services
 {
-    internal interface ICommentRepository
+    public interface ICommentRepository
     {
         //вывод комментариев к заявкам
         Task<List<Comment>> GetCommentAsync();
         
         //вывод комментария определенной заявки
-        Task<List<Comment>> GetCommentByRequestAsync(int requestId);
+        Task<List<Request>> GetCommentByRequestAsync(int requestId);
+
+        Task<Comment> GetCommentByIdAsync(int customerId);
     }
 }

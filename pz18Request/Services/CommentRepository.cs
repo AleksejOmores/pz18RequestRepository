@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace pz18Request.Services
 {
-    internal class CommentRepository : ICommentRepository
+    public class CommentRepository : ICommentRepository
     {
         readonly RegApplicationContext _context = new RegApplicationContext();
         public Task<List<Comment>> GetCommentAsync()
@@ -16,9 +16,14 @@ namespace pz18Request.Services
             return _context.Comments.ToListAsync();
         }
 
-        public Task<List<Comment>> GetCommentByRequestAsync(int requestId)
+        public Task<Comment> GetCommentByIdAsync(int customerId)
         {
-            return _context.Comments.Where(x => x.RequestId == requestId).ToListAsync();
+            return _context.Comments.FirstOrDefaultAsync(c => c.RequestId == customerId);
+        }
+
+        public Task<List<Request>> GetCommentByRequestAsync(int requestId)
+        {
+            return _context.Requests.Where(x => x.RequestId == requestId).ToListAsync();
         }
     }
 }

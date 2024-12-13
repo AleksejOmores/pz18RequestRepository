@@ -9,16 +9,19 @@ namespace pz18Request
     {
         private RequestListViewModel _requestListVM;
         private AddEditRequestViewModel _addEditRequestVM;
+        private CommentListViewModel _commentListVM;
 
-        private IRequestRepository _requestRepository = new RequestRepository();
         public MainWindowViewModel()
         {
             NavigationCommand = new RelayCommand<string>(OnNavigation);
             _requestListVM = new RequestListViewModel(new RequestRepository());
+            _commentListVM = new CommentListViewModel(new CommentRepository());
             _addEditRequestVM = RepoContainer.Container.Resolve<AddEditRequestViewModel>();
+            _commentListVM = RepoContainer.Container.Resolve<CommentListViewModel>();
             _requestListVM.AddRequestRequested += NavigationAddRequest;
             _requestListVM.EditRequestRequested += NavigationUpdateRequest;
             _addEditRequestVM.Done += NavigationToListRequest;
+            _requestListVM.CheckCommentsRequested += NavigationToCommentRequest;
         }
 
         public BindableBase _currentViewModel;
@@ -35,6 +38,8 @@ namespace pz18Request
             {
                 case "requestList":
                     CurrentViewModel = _requestListVM; break;
+                case "commentList":
+                    CurrentViewModel = _commentListVM; break;
             }
         }
 
@@ -53,6 +58,11 @@ namespace pz18Request
         {
             _requestListVM.isEditMode = false;
             CurrentViewModel = _requestListVM;
+        }
+        private void NavigationToCommentRequest(Request request)
+        {
+            _commentListVM.LoadCommentRequest(request.RequestId);
+            CurrentViewModel = _commentListVM;
         }
     }
 }

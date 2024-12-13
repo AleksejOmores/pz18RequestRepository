@@ -16,6 +16,9 @@
         <DataTemplate DataType="{x:Type viewModel:AddEditRequestViewModel}">
             <views:AddRequestView/>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModel:CommentListViewModel}">
+            <views:CommentListView/>
+        </DataTemplate>
     </Window.Resources>
 
     <Window.DataContext>
@@ -31,7 +34,7 @@
 
         <DockPanel Grid.Row="0" Background="#E8E8E8" Height="30">
             <Button Content="Заказы" Command="{Binding NavigationCommand}" Width="400" CommandParameter="requestList" DockPanel.Dock="Left"/>
-            <Button Content="Комментарии" Command="{Binding NavigationCommand}" CommandParameter="orderPrep" DockPanel.Dock="Left"/>
+            <Button Content="Комментарии" Command="{Binding NavigationCommand}" CommandParameter="commentList" DockPanel.Dock="Left"/>
         </DockPanel>
 
         <Grid x:Name="ContentGrid" Grid.Row="1">
