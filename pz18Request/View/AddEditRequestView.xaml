@@ -7,48 +7,38 @@
              xmlns:local="clr-namespace:pz18Request.View"
              xmlns:data="clr-namespace:pz18Request.ViewModel"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="550" d:DesignWidth="800">
 
-    <Grid>
+    <Grid Margin="10">
         <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <Grid Name="RequestGrid" Grid.Row="0"
-              DataContext="{Binding Requests}"
-              Margin="0 10 0 0"
-              HorizontalAlignment="Center">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="auto"/>
-            </Grid.ColumnDefinitions>
+        <StackPanel Grid.Row="0" Margin="0 20 0 20" Width="300" Background="White">
 
-            <TextBlock Text="Идентификатор" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
-            <TextBox Text="{Binding RequestID, ValidatesOnNotifyDataErrors=True}" Grid.Column="1" Grid.Row="0" MinWidth="200" Margin="3" />
-            <!--Дата заявки-->
-            <TextBlock Text="Идентификатор заявки:" Grid.Row="1" VerticalAlignment="Center" Margin="5"/>
-            <TextBox Text="{Binding ValidationRequest.DeviceModelID, ValidatesOnDataErrors=True}"
-                 Grid.Row="1" Grid.Column="1" Margin="3"/>
+            <TextBlock Text="Описание проблемы:" FontSize="16" Margin="5" FontWeight="Bold"/>
+            <TextBox Text="{Binding ValidationRequest.ProblemDescription, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
 
-            <TextBlock Text="Описание проблемы:" Grid.Row="2" VerticalAlignment="Center" Margin="5"/>
-            <TextBox Text="{Binding ValidationRequest.ProblemDescription, ValidatesOnDataErrors=True}"
-                 Grid.Row="2" Grid.Column="1" Margin="3"/>
+            <TextBlock Text="Дата подачи заявки:" FontSize="16" Margin="5" FontWeight="Bold"/>
+            <TextBox Text="{Binding ValidationRequest.DateAdded, ValidatesOnNotifyDataErrors=True}"/>
 
-            <TextBlock Text="Дата добавления:" Grid.Row="3"  VerticalAlignment="Center" Margin="5"/>
-            <TextBox Text="{Binding ValidationRequest.DateAdded, ValidatesOnDataErrors=True}"
-                 Grid.Row="3" Grid.Column="1" Margin="3"/>
-        </Grid>
+            <TextBlock Text="Идентификатор заявки:" FontSize="16" Margin="5" FontWeight="Bold"/>
+            <TextBox Text="{Binding ValidationRequest.DeviceModelID, ValidatesOnDataErrors=True}"/>
 
-        <StackPanel Grid.Row="1" Orientation="Vertical" MaxWidth="250" Margin="0 10 0 0">
-            <Button FontSize="14" Content="Сохранить" Command="{Binding SaveCommand}" Margin="5"/>
-            <Button FontSize="14" Content="Сохранить" Command="{Binding CancelCommand}" Margin="5"/>
+            <TextBlock Text="Идентификатор статуса:" FontSize="16" Margin="5" FontWeight="Bold"/>
+            <TextBox Text="{Binding ValidationRequest.StatusId, ValidatesOnDataErrors=True}"/>
+
+            <TextBlock Text="Идентификатор клиента:" FontSize="16" Margin="5" FontWeight="Bold"/>
+            <TextBox Text="{Binding ValidationRequest.ClientId, ValidatesOnDataErrors=True}"/>
+
+            <TextBlock Text="Идентификатор мастера:" FontSize="16" Margin="5" FontWeight="Bold"/>
+            <TextBox Text="{Binding ValidationRequest.TechnicianId, ValidatesOnDataErrors=True}" Margin="0 0 0 10"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Width="300" Background="White" Margin="0 0 0 10">
+            <Button Content="Сохранить" Command="{Binding SaveCommand}" Margin="0 0 60 0" Width="120" Height="35" Background="#007ACC" Foreground="White" />
+            <Button Content="Отмена" Command="{Binding CancelCommand}" Width="120" Height="35" Background="#D9534F" Foreground="White" />
         </StackPanel>
     </Grid>
 </UserControl>

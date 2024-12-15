@@ -6,67 +6,47 @@
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:local="clr-namespace:pz18Request.View"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="550" d:DesignWidth="800">
 
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
             <i:InvokeCommandAction Command="{Binding LoadRequest}"/>
         </i:EventTrigger>
     </i:Interaction.Triggers>
-    
-    <Grid>
+
+    <Grid Margin="10">
         <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <Grid Name="NavigationBar" Margin="5">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <Button Content="добавить заявку"
-            Command="{Binding AddRequestCommand}"
-            Grid.Column="0"
-            HorizontalAlignment="Left"
-            HorizontalContentAlignment="Center"
-            Width="150"/>
-        </Grid>
+        <TextBlock Text="Список заявок" FontSize="20" FontWeight="Bold" Margin="10" />
 
-        <DataGrid ItemsSource="{Binding Requests}"
-          AutoGenerateColumns="False"
-          CanUserAddRows="False"
-          Grid.Row="1">
+        <DataGrid ItemsSource="{Binding Requests}" 
+              AutoGenerateColumns="False" 
+              CanUserAddRows="False"
+              Grid.Row="1">
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding DateAdded}"
-             Width="*"/>
-                <DataGridTextColumn Binding="{Binding ProblemDescription}"
-                    Width="*"/>
-
-                <DataGridTemplateColumn>
+                <DataGridTextColumn Header="Идентификатор" Binding="{Binding RequestId}" />
+                <DataGridTextColumn Header="Дата заявки" Binding="{Binding DateAdded}" />
+                <DataGridTextColumn Header="Описание проблемы" Binding="{Binding ProblemDescription}" />
+                <DataGridTemplateColumn Header="Действия">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Content="редактировать"
-                            Command="{Binding DataContext.EditRequestCommand,
-                                RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
-                            CommandParameter="{Binding}"
-                            Margin="5"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTemplateColumn>
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <Button Content="Комментарий"
-                                    Command="{Binding DataContext.CheckCommentsCommand,
-                                        RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
-                                    CommandParameter="{Binding}"
-                                    Margin="5"/>    
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <Button Content="Редактировать" Command="{Binding DataContext.EditRequestCommand, 
+                                        RelativeSource={RelativeSource AncestorType=DataGrid}}" 
+                                        CommandParameter="{Binding}" 
+                                        Background="#007ACC" Foreground="White" Margin="2" />
+                                <Button Content="Комментарии" Command="{Binding DataContext.ViewCommentsCommand, 
+                                        RelativeSource={RelativeSource AncestorType=DataGrid}}" 
+                                        CommandParameter="{Binding}" 
+                                        Background="#FF9900" Foreground="White" Margin="2" />
+                            </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
-
         </DataGrid>
     </Grid>
 </UserControl>

@@ -16,12 +16,11 @@ namespace pz18Request
             NavigationCommand = new RelayCommand<string>(OnNavigation);
             _requestListVM = new RequestListViewModel(new RequestRepository());
             _commentListVM = new CommentListViewModel(new CommentRepository());
-            _addEditRequestVM = RepoContainer.Container.Resolve<AddEditRequestViewModel>();
-            _commentListVM = RepoContainer.Container.Resolve<CommentListViewModel>();
+            _addEditRequestVM = new AddEditRequestViewModel(new RequestRepository());
             _requestListVM.AddRequestRequested += NavigationAddRequest;
             _requestListVM.EditRequestRequested += NavigationUpdateRequest;
             _addEditRequestVM.Done += NavigationToListRequest;
-            _requestListVM.CheckCommentsRequested += NavigationToCommentRequest;
+            _requestListVM.ViewCommandRequested += NavigationToCommentRequest;
         }
 
         public BindableBase _currentViewModel;

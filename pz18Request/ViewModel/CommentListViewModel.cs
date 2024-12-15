@@ -47,26 +47,26 @@ namespace pz18Request.ViewModel
         public ICommand LoadCommentCommand { get; }
 
         private List<Comment>? _commentList;
-        private List<Request>? _requestList;
         public RelayCommand<Request> OpenOrderViewCommand { get; private set; }
 
         public event Action<Request> OpenOrderViewRequested = delegate { };
         public async void LoadComment()
         {
-            Comments = new ObservableCollection<Comment>(await _repository.GetCommentAsync());
+            Comments.Clear();
+            var comments  = new ObservableCollection<Comment>(await _repository.GetCommentAsync());
+            foreach (var comment in comments)
+            {
+                Comments.Add(comment);
+            }
         }
 
-        public async void LoadCommentRequest(int commentId)
+        public async void LoadCommentRequest(int requestId)
         {
-            try
+            Comments.Clear();
+            var comments = await _repository.GetCommentByRequestAsync(requestId);
+            foreach (var comment in comments)
             {
-                _requestList = await _repository.GetCommentByRequestAsync(commentId);
-                Requests = new ObservableCollection<Request>(_requestList.OrderBy(o => o.ProblemDescription));
-
-            }
-            catch (Exception ex)
-            {
-                
+                Comments.Add(comment);
             }
         }
     }

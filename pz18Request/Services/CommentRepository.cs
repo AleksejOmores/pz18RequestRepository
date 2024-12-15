@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace pz18Request.Services
 {
@@ -21,9 +22,11 @@ namespace pz18Request.Services
             return _context.Comments.FirstOrDefaultAsync(c => c.RequestId == customerId);
         }
 
-        public Task<List<Request>> GetCommentByRequestAsync(int requestId)
+        public async Task<List<Comment>> GetCommentByRequestAsync(int requestId)
         {
-            return _context.Requests.Where(x => x.RequestId == requestId).ToListAsync();
+            return await _context.Comments
+                .Where(c => c.RequestId == requestId)
+                .ToListAsync();
         }
     }
 }

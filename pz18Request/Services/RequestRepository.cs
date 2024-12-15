@@ -36,11 +36,18 @@ namespace pz18Request.Services
 
         public async Task<Request> UpdateRequestAsync(Request request)
         {
-            if (!_context.Requests.Local.Any(x => x.RequestId == request.RequestId))
+            var existingEntity = await _context.Requests.FindAsync(request.RequestId);
+
+            if (existingEntity != null)
+            {
+                _context.Entry(existingEntity).CurrentValues.SetValues(request);
+            }
+            else
             {
                 _context.Requests.Attach(request);
+                _context.Entry(request).State = EntityState.Modified;
             }
-            _context.Entry(request).State = EntityState.Modified;
+
             await _context.SaveChangesAsync();
             return request;
         }

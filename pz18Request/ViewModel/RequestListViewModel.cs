@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace pz18Request.ViewModel
 {
@@ -20,6 +21,7 @@ namespace pz18Request.ViewModel
             AddRequestCommand = new RelayCommand(OnAddRequest);
             EditRequestCommand = new RelayCommand<Request>(OnEditRequest);
             CheckCommentsCommand = new RelayCommand<Request>(OnCheckComment);
+            ViewCommentsCommand = new RelayCommand<Request>(OnViewComments);
             LoadRequest();
         }
 
@@ -48,28 +50,34 @@ namespace pz18Request.ViewModel
 
         public RelayCommand AddRequestCommand { get; private set; }
 
-        public RelayCommand<Request> EditRequestCommand { get; private set; }
+        public ICommand EditRequestCommand { get; }
+        public ICommand ViewCommentsCommand { get; }
 
         public event Action AddRequestRequested = delegate { };
-        public event Action<Request> EditRequestRequested = delegate { };
 
+        public event Action<Request> EditRequestRequested = delegate { };
         public RelayCommand<Request> CheckCommentsCommand { get; private set; }
 
         public event Action<Request> CheckCommentsRequested = delegate { };
 
+        public event Action<Request> ViewCommandRequested = delegate { };
         private void OnAddRequest()
         {
             AddRequestRequested?.Invoke();
         }
         private void OnEditRequest(Request request)
         {
-            EditRequestRequested(request);
+            EditRequestRequested?.Invoke(request);
         }
 
         private void OnCheckComment(Request request)
         {
             CheckCommentsRequested(request);
+        }
 
+        private void OnViewComments(Request selectedRequest)
+        {
+            ViewCommandRequested?.Invoke(selectedRequest);
         }
     }
 }

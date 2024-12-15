@@ -34,7 +34,6 @@ namespace pz18Request
         protected override void SetProperty<T>(ref T member, T value, [CallerMemberName] string property = "")
         {
             base.SetProperty(ref member, value, property);
-            //validation
             ValidateProperty(property, value);
         }
 

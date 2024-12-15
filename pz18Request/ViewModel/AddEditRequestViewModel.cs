@@ -76,34 +76,52 @@ namespace pz18Request.ViewModel
 
         private bool CanSave() => !ValidationRequest.HasErrors;
 
+        private Request _editRequest;
+
         private async void OnSave()
         {
             try
             {
-                var request = new Request
-                {
-                    RequestId = ValidationRequest.RequestID,
-                    DateAdded = ValidationRequest.DateAdded,
-                    DeviceModelId = ValidationRequest.DeviceModelID,
-                    ProblemDescription = ValidationRequest.ProblemDescription
-                };
-
                 if (IsEditMode)
                 {
-                    await _repository.UpdateRequestAsync(request);
-                    MessageBox.Show("Заявка успешно обновлена.", "Информация", MessageBoxButton.OK, MessageBoxImage.Information);
+                    var existingRequest = await _repository.GetRequstByIdAsync(ValidationRequest.RequestID);
+
+                    if (existingRequest != null)
+                    {
+                        existingRequest.DateAdded = ValidationRequest.DateAdded;
+                        existingRequest.ProblemDescription = ValidationRequest.ProblemDescription;
+                        existingRequest.DeviceModelId = ValidationRequest.DeviceModelID;
+                        existingRequest.StatusId = ValidationRequest.StatusId;
+                        existingRequest.ClientId = ValidationRequest.ClientId;
+                        existingRequest.TechnicianId = ValidationRequest.TechnicianId;
+
+                        await _repository.UpdateRequestAsync(existingRequest);
+                    }
+                    else
+                    {
+                        ShowMessage("Ошибка: Заявка не найдена.");
+                        return;
+                    }
                 }
                 else
                 {
-                    await _repository.AddRequestAsync(request);
-                    MessageBox.Show("Заявка успешно добавлена.", "Информация", MessageBoxButton.OK, MessageBoxImage.Information);
+                    await _repository.AddRequestAsync(new Request
+                    {
+                        DateAdded = ValidationRequest.DateAdded,
+                        ProblemDescription = ValidationRequest.ProblemDescription,
+                        DeviceModelId = ValidationRequest.DeviceModelID,
+                        StatusId = ValidationRequest.StatusId,
+                        ClientId = ValidationRequest.ClientId,
+                        TechnicianId = ValidationRequest.TechnicianId,
+                    });
                 }
 
+                ShowMessage("Данные успешно сохранены.");
                 Done?.Invoke();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка сохранения: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                ShowMessage($"Ошибка при сохранении: {ex.Message}");
             }
         }
 
@@ -114,21 +132,18 @@ namespace pz18Request.ViewModel
 
         public void SetRequest(Request request)
         {
-            if (ValidationRequest != null)
-            {
-                ValidationRequest.ErrorsChanged -= OnCanExecuteChanges;
-            }
+            ValidationRequest.RequestID = request.RequestId;
+            ValidationRequest.DateAdded = request.DateAdded;
+            ValidationRequest.ProblemDescription = request.ProblemDescription;
+            ValidationRequest.DeviceModelID = request.DeviceModelId;
+            ValidationRequest.StatusId = request.StatusId;
+            ValidationRequest.ClientId = request.ClientId;
+            ValidationRequest.TechnicianId = request.TechnicianId;
+        }
 
-            ValidationRequest = new ValidationRequest
-            {
-                RequestID = request.RequestId,
-                DateAdded = request.DateAdded,
-                DeviceModelID = request.DeviceModelId,
-                ProblemDescription = request.ProblemDescription
-            };
-
-            ValidationRequest.ErrorsChanged += OnCanExecuteChanges;
-            IsEditMode = true;
+        private void ShowMessage(string message)
+        {
+            MessageBox.Show(message, "Информация", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         private void OnCanExecuteChanges(object sender, EventArgs e)

@@ -32,9 +32,9 @@ namespace pz18Request.ViewModel
         [Required]
         public int ClientId { get => _clientId; set => SetProperty(ref _clientId, value); }
 
-        private int _technicianId;
+        private int? _technicianId;
         [Required]
-        public int TechnicianId { get => _technicianId; set => SetProperty(ref _technicianId, value); }
+        public int? TechnicianId { get => _technicianId; set => SetProperty(ref _technicianId, value); }
 
     }
 }
